@@ -3,20 +3,22 @@ import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { apiFetch } from "../api";
 
+import type { Task, User } from "../types";
+
 const router = useRouter();
 const route = useRoute();
 
 const isEdit = route.name === "edit";
 const taskId = route.params.id;
 
-const users = ref<any[]>([]);
+const users = ref<User[]>([]);
 const isLoading = ref(true);
 
 const form = ref({
   title: "",
   details: "",
   emoji: "📝",
-  user_id: "",
+  user_ids: [] as number[],
   due_date: new Date().toISOString().split("T")[0],
   is_recurring: false,
   interval_value: 1,
@@ -48,14 +50,14 @@ onMounted(async () => {
     users.value = await apiFetch("/users");
 
     if (isEdit) {
-      const allTasks = await apiFetch("/tasks");
-      const task = allTasks.find((t: any) => t.id === Number(taskId));
+      const allTasks: Task[] = await apiFetch("/tasks");
+      const task = allTasks.find((t) => t.id === Number(taskId));
       if (task) {
         form.value = {
           title: task.title,
           details: task.details || "",
           emoji: task.emoji || "📝",
-          user_id: task.user_id,
+          user_ids: task.user_ids || [],
           due_date: task.due_date.split("T")[0],
           is_recurring: task.is_recurring,
           interval_value: task.interval_value || 1,
@@ -65,7 +67,7 @@ onMounted(async () => {
       }
     } else {
       if (users.value.length > 0) {
-        form.value.user_id = users.value[0].id;
+        form.value.user_ids = [users.value[0].id];
       }
     }
   } catch (err) {
@@ -78,10 +80,8 @@ onMounted(async () => {
 async function saveTask() {
   const payload = {
     ...form.value,
-    user_id: Number(form.value.user_id),
     specific_day:
-      form.value.specific_day !== null &&
-      form.value.specific_day !== ("" as any)
+      form.value.specific_day !== null && String(form.value.specific_day) !== ""
         ? Number(form.value.specific_day)
         : null,
   };
@@ -182,17 +182,22 @@ async function saveTask() {
 
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Tilldelad Användare</label
+            >Tilldelade Användare</label
           >
           <select
-            v-model="form.user_id"
+            v-model="form.user_ids"
+            multiple
             required
             class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
+            size="3"
           >
             <option v-for="u in users" :key="u.id" :value="u.id">
               {{ u.username }}
             </option>
           </select>
+          <p class="text-xs text-gray-500 mt-1">
+            Håll inne Ctrl/Cmd för att välja flera
+          </p>
         </div>
 
         <div>

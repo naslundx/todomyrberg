@@ -1,6 +1,5 @@
-from datetime import date, timedelta
-from typing import Optional
 import math
+from datetime import date, timedelta
 
 
 def calculate_snooze_days(interval_type: str, interval_value: int) -> int:
@@ -24,7 +23,7 @@ def calculate_next_due_date(
     from_date: date,
     interval_type: str,
     interval_value: int,
-    specific_day: Optional[int],
+    specific_day: int | None,
     force_at_least_7_days: bool = False,
 ) -> date:
     next_date = from_date

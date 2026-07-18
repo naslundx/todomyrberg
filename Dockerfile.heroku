@@ -31,5 +31,5 @@ COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
 # Expose port (Heroku dynamically assigns PORT env var)
 EXPOSE 5000
 
-# Start the Flask app
-CMD ["uv", "run", "python", "main.py"]
+# Start the Flask app using Gunicorn
+CMD ["sh", "-c", "uv run gunicorn --bind 0.0.0.0:${PORT:-5000} main:app"]

@@ -1,17 +1,23 @@
 import os
+import random
 import sys
-from datetime import date
+from datetime import date, timedelta
 
 # Add the backend directory to python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from main import create_app
-from src.models import db, User, Task
+from src.models import Task, User, db
 
 app = create_app()
 
 
-def setup():
+def random_offset(days: int) -> timedelta:
+    """Returns a random timedelta between 0 and `days`."""
+    return timedelta(days=random.randint(0, days))
+
+
+def setup() -> None:
     with app.app_context():
         print("Creating tables...")
         db.create_all()
@@ -31,39 +37,134 @@ def setup():
 
         print("Adding example tasks...")
         if Task.query.count() == 0:
+            today = date.today()
             tasks = [
                 Task(
-                    title="Städa badrum",
-                    user_id=marcus.id,
-                    due_date=date.today(),
-                    emoji="🧽",
-                    details="Glöm inte att torka av spegeln.",
+                    title="Städa lilla badrummet",
+                    users=[marcus],
+                    due_date=today + random_offset(7),
+                    emoji="🚿",
                     is_recurring=True,
                     interval_type="weeks",
                     interval_value=1,
-                    specific_day=3,  # Thursday
                 ),
                 Task(
-                    title="Rengör ugn",
-                    user_id=vida.id,
-                    due_date=date.today(),
+                    title="Städa stora badrummet",
+                    users=[marcus],
+                    due_date=today + random_offset(7),
+                    emoji="🛁",
+                    is_recurring=True,
+                    interval_type="weeks",
+                    interval_value=1,
+                ),
+                Task(
+                    title="Rengör ugnen",
+                    users=[marcus],
+                    due_date=today + random_offset(60),
                     emoji="🔥",
-                    details=None,
                     is_recurring=True,
                     interval_type="months",
-                    interval_value=3,
-                    specific_day=1,
+                    interval_value=2,
                 ),
                 Task(
-                    title="Sortera viktiga papper",
-                    user_id=marcus.id,
-                    due_date=date.today(),
+                    title="Rengör diskmaskin",
+                    users=[marcus],
+                    due_date=today + random_offset(30),
+                    emoji="🍽️",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=1,
+                ),
+                Task(
+                    title="Rengör kaffemaskin",
+                    users=[marcus],
+                    due_date=today + random_offset(30),
+                    emoji="☕",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=1,
+                ),
+                Task(
+                    title="Gå igenom viktiga papper",
+                    users=[vida],
+                    due_date=today + random_offset(180),
+                    emoji="📁",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=6,
+                ),
+                Task(
+                    title="Sortera nyinkomna papper",
+                    users=[vida],
+                    due_date=today + random_offset(30),
                     emoji="📄",
-                    details=None,
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=1,
+                ),
+                Task(
+                    title="Rensa i förrådet",
+                    users=[vida, marcus],
+                    due_date=today + random_offset(180),
+                    emoji="📦",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=6,
+                ),
+                Task(
+                    title="Bokslut",
+                    users=[vida, marcus],
+                    due_date=today + random_offset(30),
+                    emoji="💰",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=1,
+                    specific_day=24,
+                ),
+                Task(
+                    title="Ta hand om cyklar",
+                    users=[marcus],
+                    due_date=today + random_offset(21),
+                    emoji="🚲",
+                    is_recurring=True,
+                    interval_type="weeks",
+                    interval_value=3,
+                ),
+                Task(
+                    title="Dammtorka",
+                    users=[marcus],
+                    due_date=today + random_offset(7),
+                    emoji="🧹",
+                    is_recurring=True,
+                    interval_type="weeks",
+                    interval_value=1,
+                ),
+                Task(
+                    title="Kontrollera backup",
+                    users=[marcus],
+                    due_date=today + random_offset(180),
+                    emoji="💾",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=6,
+                ),
+                Task(
+                    title="Testa brandvarnare",
+                    users=[marcus],
+                    due_date=today + random_offset(180),
+                    emoji="🚨",
+                    is_recurring=True,
+                    interval_type="months",
+                    interval_value=6,
+                ),
+                Task(
+                    title="Frosta av frys",
+                    users=[vida],
+                    due_date=today + random_offset(365),
+                    emoji="❄️",
                     is_recurring=True,
                     interval_type="years",
                     interval_value=1,
-                    specific_day=None,
                 ),
             ]
             db.session.add_all(tasks)

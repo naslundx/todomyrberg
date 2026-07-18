@@ -1,9 +1,12 @@
 import os
+from typing import Any
+
 from flask import Flask
 from flask_cors import CORS
+from werkzeug.exceptions import NotFound
 
-
-from typing import Any
+from src.models import db
+from src.routes import api
 
 
 def create_app() -> Flask:
@@ -15,21 +18,18 @@ def create_app() -> Flask:
     )
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    from src.models import db
-
     db.init_app(flask_app)
-
-    from src.routes import api
 
     flask_app.register_blueprint(api, url_prefix="/api")
 
     @flask_app.route("/", defaults={"path": ""})
     @flask_app.route("/<path:path>")
     def catch_all(path: str) -> Any:
-        if path != "" and os.path.exists(
-            os.path.join(flask_app.static_folder or "", path)
-        ):
-            return flask_app.send_static_file(path)
+        if path != "":
+            try:
+                return flask_app.send_static_file(path)
+            except NotFound:
+                pass
         return flask_app.send_static_file("index.html")
 
     return flask_app

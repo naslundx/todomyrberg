@@ -4,10 +4,12 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { apiFetch } from "../api";
 
+import type { Task } from "../types";
+
 const router = useRouter();
 const userStore = useUserStore();
 
-const tasks = ref<any[]>([]);
+const tasks = ref<Task[]>([]);
 const isLoading = ref(true);
 
 onMounted(() => {
@@ -29,7 +31,7 @@ async function loadTasks() {
   }
 }
 
-async function markAction(task: any, action: "done" | "snooze") {
+async function markAction(task: Task, action: "done" | "snooze") {
   try {
     await apiFetch(`/tasks/${task.id}/action`, {
       method: "POST",
@@ -112,7 +114,10 @@ function logout() {
             <p v-if="task.is_recurring" class="text-xs text-gray-500 mt-1">
               <font-awesome-icon icon="rotate-right" class="mr-1" />
               Återkommande ({{
-                formatInterval(task.interval_value, task.interval_type)
+                formatInterval(
+                  task.interval_value ?? 1,
+                  task.interval_type || "days",
+                )
               }})
             </p>
           </div>

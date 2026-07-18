@@ -13,13 +13,24 @@ dependencies = [
     "python-dotenv>=1.0.1",
 ]
 
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP", "PL", "RUF", "C4", "SIM", "TCH", "T20"]
+ignore = ["PLR2004", "PLR0913", "TC006"]
+
+[tool.ruff.lint.per-file-ignores]
+"setup_database.py" = ["T201"]
+
 [tool.mypy]
-ignore_missing_imports = true
-disable_error_code = ["name-defined"]
+strict = true
+
+[dependency-groups]
 dev = [
     "black>=25.1.0",
+    "flask-sqlalchemy>=3.1.1",
     "mypy>=2.3.0",
     "pylint>=4.0.6",
     "ruff>=0.13.0",
+    "sqlalchemy>=2.0.51",
+    "types-flask-cors>=6.0.3.20260712",
     "types-psycopg2>=2.9.21.20260712",
 ]

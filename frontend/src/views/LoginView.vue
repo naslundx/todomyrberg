@@ -22,8 +22,9 @@ async function login() {
     });
     userStore.login(user.id, user.username);
     router.push("/");
-  } catch (err: any) {
-    errorMsg.value = err.message || "Ett fel uppstod";
+  } catch (err) {
+    const error = err as Error;
+    errorMsg.value = error.message || "Ett fel uppstod";
   } finally {
     isLoading.value = false;
   }

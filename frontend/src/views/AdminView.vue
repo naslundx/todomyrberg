@@ -3,9 +3,11 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { apiFetch } from "../api";
 
+import type { Task, User } from "../types";
+
 const router = useRouter();
-const tasks = ref<any[]>([]);
-const users = ref<any[]>([]);
+const tasks = ref<Task[]>([]);
+const users = ref<User[]>([]);
 const isLoading = ref(true);
 
 onMounted(() => {
@@ -124,14 +126,20 @@ async function deleteTask(taskId: number) {
 
           <div class="text-sm text-gray-600 mb-4 grid grid-cols-2 gap-2">
             <div>
-              <strong>Användare:</strong> {{ getUserName(task.user_id) }}
+              <strong>Användare:</strong>
+              {{ task.user_ids.map((id) => getUserName(id)).join(", ") }}
             </div>
             <div>
               <strong>Nästa tillfälle:</strong> {{ formatDate(task.due_date) }}
             </div>
             <div v-if="task.is_recurring" class="col-span-2">
               <strong>Intervall:</strong>
-              {{ formatInterval(task.interval_value, task.interval_type) }}
+              {{
+                formatInterval(
+                  task.interval_value ?? 1,
+                  task.interval_type || "days",
+                )
+              }}
               <span v-if="task.specific_day !== null"
                 >(Dag: {{ task.specific_day }})</span
               >

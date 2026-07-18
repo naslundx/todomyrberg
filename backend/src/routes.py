@@ -1,8 +1,10 @@
-from flask import Blueprint, jsonify, request, Response
 from datetime import date, timedelta
 from typing import Any, cast
-from .models import db, User, Task
-from .utils import calculate_snooze_days, calculate_next_due_date
+
+from flask import Blueprint, Response, jsonify, request
+
+from .models import Task, User, db
+from .utils import calculate_next_due_date, calculate_snooze_days
 
 api = Blueprint("api", __name__)
 
@@ -36,7 +38,7 @@ def get_tasks() -> Response:
         today = date.today()
         tasks = (
             Task.query.filter(
-                Task.user_id == int(user_id),
+                Task.users.any(User.id == int(user_id)),
                 Task.status == "pending",
                 Task.due_date <= today,
             )
@@ -55,7 +57,6 @@ def create_task() -> tuple[Response, int]:
 
     task = Task(
         title=data["title"],
-        user_id=data["user_id"],
         due_date=date.fromisoformat(data["due_date"]),
         details=data.get("details"),
         emoji=data.get("emoji", "📝"),
@@ -64,6 +65,11 @@ def create_task() -> tuple[Response, int]:
         interval_value=data.get("interval_value"),
         specific_day=data.get("specific_day"),
     )
+
+    if "user_ids" in data:
+        users = User.query.filter(User.id.in_(data["user_ids"])).all()
+        task.users = users
+
     db.session.add(task)
     db.session.commit()
     return jsonify(task.to_dict()), 201
@@ -76,8 +82,9 @@ def update_task(task_id: int) -> Response:
 
     if "title" in data:
         task.title = data["title"]
-    if "user_id" in data:
-        task.user_id = data["user_id"]
+    if "user_ids" in data:
+        users = User.query.filter(User.id.in_(data["user_ids"])).all()
+        task.users = users
     if "due_date" in data:
         task.due_date = date.fromisoformat(data["due_date"])
     if "details" in data:
