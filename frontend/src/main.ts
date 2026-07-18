@@ -41,7 +41,7 @@ library.add(
   faCheckCircle,
   faArrowLeft,
   faSignOutAlt,
-  faRotateRight
+  faRotateRight,
 );
 
 app.mount("#app");

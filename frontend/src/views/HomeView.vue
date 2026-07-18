@@ -61,12 +61,8 @@ function logout() {
       class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md sticky top-0 z-10"
     >
       <div>
-        <h1 class="text-xl font-bold">
-          Hej, {{ userStore.username }}!
-        </h1>
-        <p class="text-blue-100 text-sm">
-          Dina uppgifter för idag
-        </p>
+        <h1 class="text-xl font-bold">Hej, {{ userStore.username }}!</h1>
+        <p class="text-blue-100 text-sm">Dina uppgifter för idag</p>
       </div>
       <div class="flex gap-4">
         <button
@@ -87,31 +83,20 @@ function logout() {
     </header>
 
     <main class="p-4 max-w-lg mx-auto">
-      <div
-        v-if="isLoading"
-        class="text-center py-10 text-gray-500"
-      >
+      <div v-if="isLoading" class="text-center py-10 text-gray-500">
         Laddar uppgifter...
       </div>
-      <div
-        v-else-if="tasks.length === 0"
-        class="text-center py-10"
-      >
+      <div v-else-if="tasks.length === 0" class="text-center py-10">
         <font-awesome-icon
           icon="check-circle"
           class="text-6xl text-green-400 mb-4"
         />
-        <h2 class="text-2xl font-semibold text-gray-700">
-          Allt är klart!
-        </h2>
+        <h2 class="text-2xl font-semibold text-gray-700">Allt är klart!</h2>
         <p class="text-gray-500 mt-2">
           Bra jobbat, du har inga fler uppgifter idag.
         </p>
       </div>
-      <div
-        v-else
-        class="space-y-4"
-      >
+      <div v-else class="space-y-4">
         <div
           v-for="task in tasks"
           :key="task.id"
@@ -124,14 +109,8 @@ function logout() {
               <span v-if="task.emoji">{{ task.emoji }}</span>
               {{ task.title }}
             </h3>
-            <p
-              v-if="task.is_recurring"
-              class="text-xs text-gray-500 mt-1"
-            >
-              <font-awesome-icon
-                icon="rotate-right"
-                class="mr-1"
-              />
+            <p v-if="task.is_recurring" class="text-xs text-gray-500 mt-1">
+              <font-awesome-icon icon="rotate-right" class="mr-1" />
               Återkommande ({{
                 formatInterval(task.interval_value, task.interval_type)
               }})
@@ -168,10 +147,7 @@ function logout() {
       class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition transform hover:scale-105 z-20"
       @click="router.push('/add')"
     >
-      <font-awesome-icon
-        icon="plus"
-        class="text-2xl"
-      />
+      <font-awesome-icon icon="plus" class="text-2xl" />
     </button>
   </div>
 </template>

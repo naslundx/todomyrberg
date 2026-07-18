@@ -123,19 +123,16 @@ async function saveTask() {
     </header>
 
     <main class="p-4 max-w-lg mx-auto">
-      <div
-        v-if="isLoading"
-        class="text-center py-10"
-      >
-        Laddar...
-      </div>
+      <div v-if="isLoading" class="text-center py-10">Laddar...</div>
       <form
         v-else
         class="bg-white rounded-xl shadow p-6 space-y-4"
         @submit.prevent="saveTask"
       >
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Emoji</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Emoji</label
+          >
           <div class="flex flex-wrap gap-2">
             <button
               v-for="e in emojis"
@@ -154,23 +151,27 @@ async function saveTask() {
               maxlength="2"
               title="Egen emoji"
               placeholder="📝"
-            >
+            />
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Titel</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Titel</label
+          >
           <input
             v-model="form.title"
             type="text"
             required
             class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
             placeholder="Ex: Städa badrum"
-          >
+          />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Detaljer (Frivilligt)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Detaljer (Frivilligt)</label
+          >
           <textarea
             v-model="form.details"
             class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
@@ -180,30 +181,30 @@ async function saveTask() {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tilldelad Användare</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Tilldelad Användare</label
+          >
           <select
             v-model="form.user_id"
             required
             class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
           >
-            <option
-              v-for="u in users"
-              :key="u.id"
-              :value="u.id"
-            >
+            <option v-for="u in users" :key="u.id" :value="u.id">
               {{ u.username }}
             </option>
           </select>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Datum / Nästa tillfälle</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Datum / Nästa tillfälle</label
+          >
           <input
             v-model="form.due_date"
             type="date"
             required
             class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          >
+          />
         </div>
 
         <div class="border-t pt-4">
@@ -212,7 +213,7 @@ async function saveTask() {
               v-model="form.is_recurring"
               type="checkbox"
               class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-            >
+            />
             <span class="font-medium text-gray-800">Återkommande uppgift</span>
           </label>
         </div>
@@ -223,72 +224,56 @@ async function saveTask() {
         >
           <div class="flex gap-4">
             <div class="flex-1">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Intervall</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Intervall</label
+              >
               <input
                 v-model.number="form.interval_value"
                 type="number"
                 min="1"
                 required
                 class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
+              />
             </div>
             <div class="flex-2">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Typ</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Typ</label
+              >
               <select
                 v-model="form.interval_type"
                 class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
               >
-                <option value="days">
-                  Dagar
-                </option>
-                <option value="weeks">
-                  Veckor
-                </option>
-                <option value="months">
-                  Månader
-                </option>
-                <option value="years">
-                  År
-                </option>
+                <option value="days">Dagar</option>
+                <option value="weeks">Veckor</option>
+                <option value="months">Månader</option>
+                <option value="years">År</option>
               </select>
             </div>
           </div>
 
           <div v-if="form.interval_type === 'weeks'">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Specifik veckodag (frivilligt)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Specifik veckodag (frivilligt)</label
+            >
             <select
               v-model="form.specific_day"
               class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option :value="null">
-                Ingen specifik dag
-              </option>
-              <option :value="0">
-                Måndag
-              </option>
-              <option :value="1">
-                Tisdag
-              </option>
-              <option :value="2">
-                Onsdag
-              </option>
-              <option :value="3">
-                Torsdag
-              </option>
-              <option :value="4">
-                Fredag
-              </option>
-              <option :value="5">
-                Lördag
-              </option>
-              <option :value="6">
-                Söndag
-              </option>
+              <option :value="null">Ingen specifik dag</option>
+              <option :value="0">Måndag</option>
+              <option :value="1">Tisdag</option>
+              <option :value="2">Onsdag</option>
+              <option :value="3">Torsdag</option>
+              <option :value="4">Fredag</option>
+              <option :value="5">Lördag</option>
+              <option :value="6">Söndag</option>
             </select>
           </div>
 
           <div v-if="form.interval_type === 'months'">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Specifik dag i månaden (1-31, frivilligt)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Specifik dag i månaden (1-31, frivilligt)</label
+            >
             <input
               v-model.number="form.specific_day"
               type="number"
@@ -296,7 +281,7 @@ async function saveTask() {
               max="31"
               class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
               placeholder="Lämna tomt för ingen specifik"
-            >
+            />
           </div>
         </div>
 

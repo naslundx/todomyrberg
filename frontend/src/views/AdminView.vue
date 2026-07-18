@@ -48,7 +48,7 @@ function formatInterval(value: number, type: string) {
 async function markEarlyDone(taskId: number) {
   if (
     !confirm(
-      "Är du säker på att du vill markera denna uppgift som tidigt klar?"
+      "Är du säker på att du vill markera denna uppgift som tidigt klar?",
     )
   )
     return;
@@ -85,22 +85,14 @@ async function deleteTask(taskId: number) {
       >
         <font-awesome-icon icon="arrow-left" />
       </button>
-      <h1 class="text-xl font-bold flex-1">
-        Admin
-      </h1>
+      <h1 class="text-xl font-bold flex-1">Admin</h1>
     </header>
 
     <main class="p-4 max-w-2xl mx-auto">
-      <div
-        v-if="isLoading"
-        class="text-center py-10 text-gray-500"
-      >
+      <div v-if="isLoading" class="text-center py-10 text-gray-500">
         Laddar...
       </div>
-      <div
-        v-else
-        class="space-y-4"
-      >
+      <div v-else class="space-y-4">
         <div
           v-for="task in tasks"
           :key="task.id"
@@ -137,18 +129,14 @@ async function deleteTask(taskId: number) {
             <div>
               <strong>Nästa tillfälle:</strong> {{ formatDate(task.due_date) }}
             </div>
-            <div
-              v-if="task.is_recurring"
-              class="col-span-2"
-            >
+            <div v-if="task.is_recurring" class="col-span-2">
               <strong>Intervall:</strong>
               {{ formatInterval(task.interval_value, task.interval_type) }}
-              <span v-if="task.specific_day !== null">(Dag: {{ task.specific_day }})</span>
+              <span v-if="task.specific_day !== null"
+                >(Dag: {{ task.specific_day }})</span
+              >
             </div>
-            <div
-              v-else
-              class="col-span-2"
-            >
+            <div v-else class="col-span-2">
               <strong>Engångsuppgift</strong>
             </div>
           </div>

@@ -36,24 +36,20 @@ async function login() {
       <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">
         TodoMyrberg
       </h1>
-      <form
-        class="space-y-4"
-        @submit.prevent="login"
-      >
+      <form class="space-y-4" @submit.prevent="login">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Användarnamn</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Användarnamn</label
+          >
           <input
             v-model="username"
             type="text"
             placeholder="Skriv ditt namn..."
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             required
-          >
+          />
         </div>
-        <p
-          v-if="errorMsg"
-          class="text-red-500 text-sm"
-        >
+        <p v-if="errorMsg" class="text-red-500 text-sm">
           {{ errorMsg }}
         </p>
         <button

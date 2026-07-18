@@ -24,7 +24,7 @@ Du behöver Docker installerat på din maskin.
    ```bash
    docker compose exec backend uv run python setup_database.py
    ```
-4. Besök `http://localhost:5173` i webbläsaren!
+4. Besök `http://localhost:5050` i webbläsaren!
    *Logga in med "Marcus" eller "Vida". Inloggningen ignorerar stora/små bokstäver.*
 
 ## Deployment (t.ex. på en Raspberry Pi)
