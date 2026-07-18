@@ -1,0 +1,45 @@
+{
+  "name": "problemlosning",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --max-warnings=0 --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@babel/core": "^7.11.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-brands-svg-icons": "^6.4.0",
+    "@fortawesome/free-regular-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "pinia": "^2.0.36",
+    "vite": "^5.0.11",
+    "vue": "^3.3.2",
+    "vue-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.22.15",
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^26.1.1",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.39.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "postcss": "^8.4.38",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^4.0.0",
+    "typescript": "~5.3.3",
+    "vue-tsc": "^2.2.12"
+  }
+}

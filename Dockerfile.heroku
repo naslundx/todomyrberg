@@ -1,0 +1,35 @@
+# Stage 1: Build the Vue Frontend
+FROM node:20-slim AS frontend-builder
+WORKDIR /app/frontend
+# Copy package files and install dependencies
+COPY frontend/package*.json ./
+RUN npm ci
+# Copy frontend source and build
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Setup the Python Backend
+FROM python:3.13-slim
+WORKDIR /app
+
+# Install uv for Python dependency management
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /bin/
+ENV UV_PROJECT_ENVIRONMENT=/opt/.venv
+
+# Copy backend dependency files and install
+COPY backend/pyproject.toml backend/uv.lock ./backend/
+WORKDIR /app/backend
+RUN uv sync --frozen
+
+# Copy backend source code
+COPY backend/ ./
+
+# Copy built frontend assets from the frontend-builder stage
+# This ensures that main.py can serve the frontend from ../frontend/dist
+COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
+
+# Expose port (Heroku dynamically assigns PORT env var)
+EXPOSE 5000
+
+# Start the Flask app
+CMD ["uv", "run", "python", "main.py"]

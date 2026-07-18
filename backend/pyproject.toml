@@ -1,0 +1,25 @@
+[project]
+name = "todomyrberg"
+version = "0.1.0"
+description = "Todo app for the Myrberg family"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.2",
+    "flask-cors>=6.0.1",
+    "flask-sqlalchemy>=3.1.1",
+    "gunicorn>=23.0.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.1",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+disable_error_code = ["name-defined"]
+dev = [
+    "black>=25.1.0",
+    "mypy>=2.3.0",
+    "pylint>=4.0.6",
+    "ruff>=0.13.0",
+    "types-psycopg2>=2.9.21.20260712",
+]
