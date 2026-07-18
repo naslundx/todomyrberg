@@ -19,9 +19,15 @@ WORKDIR /app/backend
 COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /bin/
 ENV UV_PROJECT_ENVIRONMENT=/opt/.venv
 
+# Reduce concurrency to save RAM and CPU on low-power devices like Raspberry Pi
+ENV UV_CONCURRENT_DOWNLOADS=2
+ENV UV_CONCURRENT_INSTALLS=2
+ENV UV_LINK_MODE=copy
+
 # Copy backend dependencies and install
 COPY backend/pyproject.toml backend/uv.lock ./
-RUN uv sync --frozen
+# Compile bytecode during install to improve startup time
+RUN uv sync --frozen --compile-bytecode
 
 # Copy backend source code
 COPY backend/ ./
