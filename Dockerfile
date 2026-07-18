@@ -2,9 +2,12 @@
 FROM node:20-slim AS frontend-builder
 WORKDIR /app/frontend
 
+# Prevent Node from using too much RAM on Raspberry Pi
+ENV NODE_OPTIONS="--max-old-space-size=512"
+
 # Install dependencies and build
 COPY frontend/package*.json ./
-RUN npm ci
+RUN npm ci --no-audit --no-fund
 COPY frontend/ ./
 RUN npm run build
 

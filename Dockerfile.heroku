@@ -1,9 +1,13 @@
 # Stage 1: Build the Vue Frontend
 FROM node:20-slim AS frontend-builder
 WORKDIR /app/frontend
+
+# Prevent Node from using too much RAM on Raspberry Pi
+ENV NODE_OPTIONS="--max-old-space-size=512"
+
 # Copy package files and install dependencies
 COPY frontend/package*.json ./
-RUN npm ci
+RUN npm ci --no-audit --no-fund
 # Copy frontend source and build
 COPY frontend/ ./
 RUN npm run build
