@@ -10,7 +10,7 @@ from src.routes import api
 
 
 def create_app() -> Flask:
-    flask_app = Flask(__name__, static_folder="../frontend/dist/", static_url_path="/")
+    flask_app = Flask(__name__, static_folder="../frontend/dist/")
     CORS(flask_app)
 
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(

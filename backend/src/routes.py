@@ -36,11 +36,12 @@ def get_tasks() -> Response:
     user_id = request.args.get("user_id")
     if user_id:
         today = date.today()
+        future_limit = today + timedelta(days=3)
         tasks = (
             Task.query.filter(
                 Task.users.any(User.id == int(user_id)),
                 Task.status == "pending",
-                Task.due_date <= today,
+                Task.due_date <= future_limit,
             )
             .order_by(Task.due_date)
             .all()

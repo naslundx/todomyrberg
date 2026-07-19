@@ -43,6 +43,9 @@ const emojis = [
   "💰",
   "📅",
   "📝",
+  "🛏️",
+  "🚲",
+  "🛠️",
 ];
 
 onMounted(async () => {
@@ -78,6 +81,11 @@ onMounted(async () => {
 });
 
 async function saveTask() {
+  if (form.value.user_ids.length === 0) {
+    alert("Välj minst en tilldelad användare");
+    return;
+  }
+
   const payload = {
     ...form.value,
     specific_day:
@@ -181,23 +189,31 @@ async function saveTask() {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1"
+          <label class="block text-sm font-medium text-gray-700 mb-2"
             >Tilldelade Användare</label
           >
-          <select
-            v-model="form.user_ids"
-            multiple
-            required
-            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
-            size="3"
-          >
-            <option v-for="u in users" :key="u.id" :value="u.id">
-              {{ u.username }}
-            </option>
-          </select>
-          <p class="text-xs text-gray-500 mt-1">
-            Håll inne Ctrl/Cmd för att välja flera
-          </p>
+          <div class="flex flex-col gap-2">
+            <label
+              v-for="u in users"
+              :key="u.id"
+              class="flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition"
+              :class="
+                form.user_ids.includes(u.id)
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'bg-white border-gray-200'
+              "
+            >
+              <input
+                v-model="form.user_ids"
+                type="checkbox"
+                :value="u.id"
+                class="w-6 h-6 text-blue-600 rounded focus:ring-blue-500"
+              />
+              <span class="text-lg font-medium text-gray-800">{{
+                u.username
+              }}</span>
+            </label>
+          </div>
         </div>
 
         <div>
