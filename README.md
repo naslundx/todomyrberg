@@ -35,3 +35,12 @@ Appen är containeriserad för att lätt kunna sättas upp vart som helst.
 3. Kör `docker compose up -d --build`.
 4. Kör databas-setupen `docker compose exec backend uv run python setup_database.py`.
 5. Databasen sparas permanent i en Docker-volym (`postgres_data`), så sysslorna finns kvar även om du startar om din enhet.
+
+## Setup
+
+```sh
+cp todomyrberg.service /etc/systemd/system/
+sudo systemctl enable myscript.service
+sudo systemctl start myscript.service
+sudo systemctl status myscript.service
+```

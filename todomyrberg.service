@@ -1,0 +1,14 @@
+[Unit]
+Description=ToDoMyrberg
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/admin/todomyrberg/
+ExecStart=/home/admin/todomyrberg/start.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
