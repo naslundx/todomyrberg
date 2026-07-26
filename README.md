@@ -40,7 +40,7 @@ Appen är containeriserad för att lätt kunna sättas upp vart som helst.
 
 ```sh
 cp todomyrberg.service /etc/systemd/system/
-sudo systemctl enable myscript.service
-sudo systemctl start myscript.service
-sudo systemctl status myscript.service
+sudo systemctl enable todomyrberg.service
+sudo systemctl start todomyrberg.service
+sudo systemctl status todomyrberg.service
 ```

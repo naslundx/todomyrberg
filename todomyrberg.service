@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=pi
+User=admin
 WorkingDirectory=/home/admin/todomyrberg/
 ExecStart=/home/admin/todomyrberg/start.sh
 Restart=on-failure
