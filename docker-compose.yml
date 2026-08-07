@@ -36,6 +36,8 @@ services:
 
 networks:
   todomyrberg_net:
+    name: todomyrberg_net
 
 volumes:
   todomyrberg_pg_data:
+    name: todomyrberg_pg_data

@@ -5,6 +5,7 @@ from flask import Flask
 from flask_cors import CORS
 from werkzeug.exceptions import NotFound
 
+from setup_database import setup
 from src.models import db
 from src.routes import api
 
@@ -36,6 +37,9 @@ def create_app() -> Flask:
 
 
 app = create_app()
+
+# Ensure the database is set up before handling requests
+setup(app)
 
 if __name__ == "__main__":
     PORT = int(os.environ.get("PORT", "5000"))
