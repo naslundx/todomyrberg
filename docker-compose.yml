@@ -41,3 +41,4 @@ networks:
 volumes:
   todomyrberg_pg_data:
     name: todomyrberg_pg_data
+    external: true
