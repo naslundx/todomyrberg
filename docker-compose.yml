@@ -1,14 +1,15 @@
 services:
   db:
+    container_name: todomyrberg_db
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: todomyrberg
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - todomyrberg_pg_data:/var/lib/postgresql/data
+    networks:
+      - todomyrberg_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d todomyrberg"]
       interval: 5s
@@ -16,6 +17,7 @@ services:
       retries: 5
 
   backend:
+    container_name: todomyrberg_backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -27,8 +29,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - todomyrberg_net
     volumes:
       - ./backend:/app/backend
 
+networks:
+  todomyrberg_net:
+
 volumes:
-  postgres_data:
+  todomyrberg_pg_data:
