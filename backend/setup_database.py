@@ -1,3 +1,4 @@
+import csv
 import os
 import random
 import sys
@@ -38,140 +39,51 @@ if __name__ == "__main__":
 
             db.session.commit()
 
-            print("Adding example tasks...")
-            if Task.query.count() == 0:
-                today = date.today()
-                tasks = [
-                    Task(
-                        title="Städa lilla badrummet",
-                        users=[marcus],
-                        due_date=today + random_offset(7),
-                        emoji="🚿",
-                        is_recurring=True,
-                        interval_type="weeks",
-                        interval_value=1,
-                    ),
-                    Task(
-                        title="Städa stora badrummet",
-                        users=[marcus],
-                        due_date=today + random_offset(7),
-                        emoji="🛁",
-                        is_recurring=True,
-                        interval_type="weeks",
-                        interval_value=1,
-                    ),
-                    Task(
-                        title="Rengör ugnen",
-                        users=[marcus],
-                        due_date=today + random_offset(60),
-                        emoji="🔥",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=2,
-                    ),
-                    Task(
-                        title="Rengör diskmaskin",
-                        users=[marcus],
-                        due_date=today + random_offset(30),
-                        emoji="🍽️",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=1,
-                    ),
-                    Task(
-                        title="Rengör kaffemaskin",
-                        users=[marcus],
-                        due_date=today + random_offset(30),
-                        emoji="☕",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=1,
-                    ),
-                    Task(
-                        title="Gå igenom viktiga papper",
-                        users=[vida],
-                        due_date=today + random_offset(180),
-                        emoji="📁",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=6,
-                    ),
-                    Task(
-                        title="Sortera nyinkomna papper",
-                        users=[vida],
-                        due_date=today + random_offset(30),
-                        emoji="📄",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=1,
-                    ),
-                    Task(
-                        title="Rensa i förrådet",
-                        users=[vida, marcus],
-                        due_date=today + random_offset(180),
-                        emoji="📦",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=6,
-                    ),
-                    Task(
-                        title="Bokslut",
-                        users=[vida, marcus],
-                        due_date=today + random_offset(30),
-                        emoji="💰",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=1,
-                        specific_day=24,
-                    ),
-                    Task(
-                        title="Ta hand om cyklar",
-                        users=[marcus],
-                        due_date=today + random_offset(21),
-                        emoji="🚲",
-                        is_recurring=True,
-                        interval_type="weeks",
-                        interval_value=3,
-                    ),
-                    Task(
-                        title="Dammtorka",
-                        users=[marcus],
-                        due_date=today + random_offset(7),
-                        emoji="🧹",
-                        is_recurring=True,
-                        interval_type="weeks",
-                        interval_value=1,
-                    ),
-                    Task(
-                        title="Kontrollera backup",
-                        users=[marcus],
-                        due_date=today + random_offset(180),
-                        emoji="💾",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=6,
-                    ),
-                    Task(
-                        title="Testa brandvarnare",
-                        users=[marcus],
-                        due_date=today + random_offset(180),
-                        emoji="🚨",
-                        is_recurring=True,
-                        interval_type="months",
-                        interval_value=6,
-                    ),
-                    Task(
-                        title="Frosta av frys",
-                        users=[vida],
-                        due_date=today + random_offset(365),
-                        emoji="❄️",
-                        is_recurring=True,
-                        interval_type="years",
-                        interval_value=1,
-                    ),
-                ]
+            print("Adding example tasks from CSV...")
+            existing_task_titles = {t.title for t in Task.query.all()}
+            
+            today = date.today()
+            
+            # We need a dictionary to map usernames to User objects easily
+            users_map = {u.username: u for u in User.query.all()}
+            
+            tasks = []
+            csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "initial_tasks.csv")
+            with open(csv_path, newline='', encoding='utf-8') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    if row['title'] in existing_task_titles:
+                        continue
+                    
+                    # Parse users
+                    usernames = row['users'].split(';')
+                    task_users = [users_map[u_name.strip()] for u_name in usernames if u_name.strip() in users_map]
+                    
+                    # Parse random offset
+                    offset_days = int(row['random_offset_days']) if row['random_offset_days'] else 0
+                    
+                    # Parse specific day
+                    specific_day = int(row['specific_day']) if row.get('specific_day') else None
+                    
+                    tasks.append(
+                        Task(
+                            title=row['title'],
+                            users=task_users,
+                            due_date=today + random_offset(offset_days),
+                            emoji=row['emoji'],
+                            is_recurring=row['is_recurring'].lower() == 'true',
+                            interval_type=row['interval_type'],
+                            interval_value=int(row['interval_value']) if row['interval_value'] else None,
+                            specific_day=specific_day,
+                        )
+                    )
+                    
+            if tasks:
                 db.session.add_all(tasks)
                 db.session.commit()
+                print(f"Added {len(tasks)} new tasks.")
+            else:
+                print("No new tasks to add.")
 
             print("Database setup complete!")
 
