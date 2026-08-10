@@ -3,7 +3,6 @@ import random
 import sys
 from datetime import date, timedelta
 
-from flask import Flask
 from sqlalchemy.exc import IntegrityError
 
 # Add the backend directory to python path
@@ -17,7 +16,10 @@ def random_offset(days: int) -> timedelta:
     return timedelta(days=random.randint(0, days))
 
 
-def setup(app: Flask) -> None:
+if __name__ == "__main__":
+    from main import create_app
+
+    app = create_app()
     with app.app_context():
         try:
             print("Creating tables...")
