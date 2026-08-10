@@ -37,4 +37,4 @@ COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
 
 # Expose port and run Gunicorn
 EXPOSE 5000
-CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:5000", "--threads", "4", "main:app"]
